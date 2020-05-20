@@ -17,8 +17,8 @@ interface Task {
     currentState: boolean,
     title: string,
     description: string
-    createdAt: string
-    dueDate: string
+    createdAt: Date
+    dueDate: Date
     priority: string
 }
 class App extends React.Component {
@@ -35,8 +35,8 @@ class App extends React.Component {
                 currentState: false,
                 title: "",
                 description: "",
-                createdAt: "",
-                dueDate: "",
+                createdAt: new Date(),
+                dueDate: new Date(),
                 priority: ""
             }
         }
@@ -58,7 +58,7 @@ class App extends React.Component {
         this.setState({ hideModal: false })
     }
 
-    openCity(event, key: string) {
+    openCity(event: React.MouseEvent<HTMLButtonElement>, key: string) {
         // this.taskList = JSON.parse(localStorage.getItem("listData") || "[]");
         let list = _.cloneDeep(this.taskList);
         if (key === "Pending") {
@@ -76,7 +76,7 @@ class App extends React.Component {
 
 
 
-    getClasss = (event, key: string): string | undefined => {
+    getClasss = (key: string): string | undefined => {
         const { activeSection } = this.state;
         if (key === activeSection) {
             return "tablinks active";
@@ -90,14 +90,14 @@ class App extends React.Component {
         const dataColumns = ["Summary", "Priority", "Created On", "Due Date", "Actions"];
         return (
             <>
-                {hideModal ? <AddModal onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} /> : ""}
+                {hideModal ? <AddModal onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} /> : ""}
                 <div className={styles.bottomRightAlign}>
                     <FontAwesomeIcon icon={faPlus} onClick={this._openAddModal} />
                 </div>
                 <div className="tab">
-                    <button className={this.getClasss(event, 'All Tasks')} onClick={() => this.openCity(event, 'All Tasks')}>All Tasks</button>
-                    <button className={this.getClasss(event, 'Completed')} onClick={() => this.openCity(event, 'Completed')}>Completed</button>
-                    <button className={this.getClasss(event, 'Pending')} onClick={() => this.openCity(event, 'Pending')}>Pending</button>
+                    <button className={this.getClasss('All Tasks')} onClick={(event) => this.openCity(event, 'All Tasks')}>All Tasks</button>
+                    <button className={this.getClasss('Completed')} onClick={(event) => this.openCity(event, 'Completed')}>Completed</button>
+                    <button className={this.getClasss('Pending')} onClick={(event) => this.openCity(event, 'Pending')}>Pending</button>
                 </div>
                 <Table columns={dataColumns} rows={data} />
             </>

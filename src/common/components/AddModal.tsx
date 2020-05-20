@@ -1,14 +1,13 @@
 import React from 'react';
 import styles from '../../index.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-import { formatDate } from '../commonFunctions';
+import { formatDate, fieldDate } from '../commonFunctions';
 
 interface Props {
     onConfirm: (data: State) => void,
     onClose: () => void,
     isReadOnly: boolean,
+    isDataAvailable: boolean,
     taskObj: Task
 }
 
@@ -16,16 +15,16 @@ interface Task {
     currentState: boolean,
     title: string,
     description: string
-    createdAt: string
-    dueDate: string
+    createdAt: Date
+    dueDate: Date
     priority: string
 }
 interface State {
     currentState: boolean,
     title: string,
     description: string
-    createdAt: string
-    dueDate: string
+    createdAt: Date
+    dueDate: Date
     priority: string
 }
 class AddModal extends React.Component<Props, State> {
@@ -33,24 +32,23 @@ class AddModal extends React.Component<Props, State> {
     defaultState: State;
     constructor(props: any) {
         super(props);
-        console.log(this.props.isReadOnly, this.props.taskObj, "sdfdf")
-        if (this.props.isReadOnly) {
+        if (this.props.isDataAvailable) {
             this.state = {
                 currentState: this.props.taskObj.currentState,
                 title: this.props.taskObj.title,
                 description: this.props.taskObj.description,
-                createdAt: this.props.taskObj.createdAt,
-                dueDate: this.props.taskObj.dueDate,
+                createdAt: new Date(this.props.taskObj.createdAt),
+                dueDate: new Date(this.props.taskObj.dueDate),
                 priority: this.props.taskObj.priority
             }
 
         } else {
             this.state = {
-                currentState: true,
+                currentState: false,
                 title: "",
                 description: "",
-                createdAt: "",
-                dueDate: "",
+                createdAt: new Date(),
+                dueDate: new Date(),
                 priority: "None"
             }
         }
@@ -77,7 +75,8 @@ class AddModal extends React.Component<Props, State> {
                 this.setState({ priority: value });
                 break;
             case "dueDate":
-                this.setState({ dueDate: new Date(value).toISOString() });
+                console.log(value, "Sdfds")
+                this.setState({ dueDate: new Date(value) });
                 break;
             default:
                 return null;
@@ -89,11 +88,11 @@ class AddModal extends React.Component<Props, State> {
         this.props.onClose();
     }
 
-    _handleConfirm = (event: SyntheticEvent<HTMLButtonElement, MouseEvent>) => {
+    _handleConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         this._hideModal();
         let task = this.state;
-        task.createdAt = new Date().toISOString();
+        task.createdAt = new Date();
         this.props.onConfirm(task);
     }
 
@@ -130,7 +129,7 @@ class AddModal extends React.Component<Props, State> {
                                 </div>
                                 <div className="form-group">
                                     <label>Due date</label>
-                                    <input className="form-control form-control-sm" value={this.state.dueDate} type="date" name="dueDate" id="dueDate" onChange={this._handleDataChange} readOnly={isReadOnly} />
+                                    <input className="form-control form-control-sm" value={fieldDate(new Date(this.state.dueDate), '-')} type="date" name="dueDate" id="dueDate" onChange={this._handleDataChange} readOnly={isReadOnly} />
                                 </div>
                                 <div className="form-group">
                                     <label>Priority</label>
@@ -158,7 +157,7 @@ class AddModal extends React.Component<Props, State> {
                         </div>
                         <div className="textAlignRight">
                             <button type="submit" className="btn btn-secondary btnAlign" onClick={this._handleClose}>Cancel</button>
-                            <button type="submit" className="btn btn-primary btnAlign" onClick={this._handleConfirm}>Save</button>
+                            <button type="submit" className="btn btn-primary btnAlign" onClick={this._handleConfirm}>Save Task</button>
 
                         </div>
 
