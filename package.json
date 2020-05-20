@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@types/lodash": "^4.14.151",
+    "@types/react-redux": "^7.1.9",
     "autoprefixer": "^9.8.0",
     "bootstrap": "^4.5.0",
     "html-loader": "^1.1.0",
@@ -18,7 +19,9 @@
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -29,6 +32,7 @@
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
     "node-sass": "^4.14.1",
+    "redux-devtools": "^3.5.0",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.4",
