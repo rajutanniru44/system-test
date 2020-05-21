@@ -21,7 +21,7 @@ const mapStateToProps = (state: any) => ({
 })
 
 const mapDispatchToProps = (dispatch: any) => ({
-    toggleTodo: (id: any) => dispatch(toggleTodo(id))
+    toggleTodo: (e: React.MouseEvent<HTMLButtonElement>, id: any) => dispatch(toggleTodo(e, id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

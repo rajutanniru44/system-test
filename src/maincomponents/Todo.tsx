@@ -4,6 +4,7 @@ import { formatDate } from '../common/commonFunctions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import AddModal from "../common/components/AddModal";
+import CommonConfirmation from "../common/components/CommonConfirmationModal";
 
 const Todo = ({ onClick, completed, text }: any) => {
     const columns = ["Summary", "Priority", "Created On", "Due Date", "Actions"];
@@ -24,10 +25,17 @@ const Todo = ({ onClick, completed, text }: any) => {
     }
 
     function _handleDelete(e: React.MouseEvent<SVGSVGElement>, todo: any) {
-
     }
 
     function _handleMark(e: React.MouseEvent<HTMLButtonElement>, todo: any) {
+
+    }
+
+    function _handleConfirmationModal() {
+
+    }
+
+    function _handleCloseModal() {
 
     }
 

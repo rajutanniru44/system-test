@@ -1,14 +1,14 @@
 import React from 'react'
 import FilterLink from '../container/FilterLink'
 import { VisibilityFilters } from '../actions'
+import styles from '.././index.scss';
 
 const Footer = () => (
-    <div>
-        <span>Show: </span>
-        <FilterLink filter={VisibilityFilters.SHOW_ALL}>All</FilterLink>
-        <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>Active</FilterLink>
+    <div className={styles.textAlignCenter}>
+        <FilterLink filter={VisibilityFilters.SHOW_ALL}>All Tasks</FilterLink>
         <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>Completed</FilterLink>
-    </div>
+        <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>Pending</FilterLink>
+    </div >
 )
 
 export default Footer

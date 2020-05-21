@@ -71,7 +71,7 @@ class App extends React.Component<Props, State> {
                 <Footer />
                 <VisibleTodoList />
 
-                {hideModal ? <AddModal store={this.props.store} onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} /> : ""}
+                {hideModal ? <AddModal store={this.props.store} onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} index={0} /> : ""}
                 <div className={styles.bottomRightAlign}>
                     <FontAwesomeIcon icon={faPlus} onClick={this._openAddModal} />
                 </div>
