@@ -29,7 +29,11 @@ interface State {
     description: string
     createdAt: Date
     dueDate: Date
-    priority: string
+    priority: string,
+    errors: {
+        title: string,
+        description: string
+    }
 }
 class AddModal extends React.Component<Props, State> {
     state: State;
@@ -43,7 +47,11 @@ class AddModal extends React.Component<Props, State> {
                 description: this.props.taskObj.description,
                 createdAt: new Date(this.props.taskObj.createdAt),
                 dueDate: new Date(this.props.taskObj.dueDate),
-                priority: this.props.taskObj.priority
+                priority: this.props.taskObj.priority,
+                errors: {
+                    title: "",
+                    description: ""
+                }
             }
 
         } else {
@@ -53,7 +61,11 @@ class AddModal extends React.Component<Props, State> {
                 description: "",
                 createdAt: new Date(),
                 dueDate: new Date(),
-                priority: "None"
+                priority: "None",
+                errors: {
+                    title: "",
+                    description: ""
+                }
             }
         }
         this.defaultState = this.state;
@@ -89,17 +101,50 @@ class AddModal extends React.Component<Props, State> {
         this.props.onClose();
     }
 
+    handleValidation = () => {
+        let { title, description } = this.state;
+        let errors = { title: "", description: "" };
+        let formIsValid = true;
+
+        //title
+        if (!title) {
+            formIsValid = false;
+            errors["title"] = "Cannot be empty";
+        }
+
+        if (typeof title !== "undefined") {
+            title.length >= 10 && title.length <= 140 ? formIsValid = true : formIsValid = false;
+        }
+
+        //description
+        if (!description) {
+            formIsValid = false;
+            errors["description"] = "Cannot be empty";
+        }
+
+        if (typeof description !== "undefined") {
+            description.length >= 10 && description.length <= 500 ? formIsValid = true : formIsValid = false;
+        }
+
+        this.setState({ errors: errors });
+        return formIsValid;
+    }
+
     _handleConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        this._hideModal();
-        let task = this.state;
-        task.createdAt = new Date();
-        if (this.props.isDataAvailable) {
-            this.props.store.dispatch(editTodo(task, this.props.index));
+        if (this.handleValidation()) {
+            this._hideModal();
+            let task = this.state;
+            task.createdAt = new Date();
+            if (this.props.isDataAvailable) {
+                this.props.store.dispatch(editTodo(task, this.props.index));
+            } else {
+                this.props.store.dispatch(addTodo(task));
+            }
+            this.props.onConfirm(true);
         } else {
-            this.props.store.dispatch(addTodo(task));
+            alert("Form has errors.")
         }
-        this.props.onConfirm(true);
     }
 
     _showModal = () => {
@@ -128,10 +173,12 @@ class AddModal extends React.Component<Props, State> {
                                 <div className="form-group">
                                     <label>Summary</label>
                                     <input className="form-control form-control-sm" value={this.state.title} type="text" name="title" onChange={this._handleDataChange} readOnly={isReadOnly} />
+                                    <span style={{ color: "red" }}>{this.state.errors["title"]}</span>
                                 </div>
                                 <div className="form-group">
                                     <label>Description</label>
                                     <textarea className="form-control form-control-sm" value={this.state.description} id="description" name="description" rows={3} onChange={this._handleDataChange} readOnly={isReadOnly}></textarea>
+                                    <span style={{ color: "red" }}>{this.state.errors["description"]}</span>
                                 </div>
 
                                 <div className="row">

@@ -10,7 +10,7 @@ export const setVisibilityFilter = (filter: any) => ({
     filter
 })
 
-export const toggleTodo = (e: React.MouseEvent<HTMLButtonElement>, id: any) => {
+export const toggleTodo = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
     e.stopPropagation();
     return ({
         type: 'TOGGLE_TODO',
@@ -24,7 +24,7 @@ export const editTodo = (text: any, id: number) => ({
     text
 })
 
-export const deleteTodo = (id: any) => ({
+export const deleteTodo = (id: number) => ({
     type: 'DELETE_TODO',
     id
 })
