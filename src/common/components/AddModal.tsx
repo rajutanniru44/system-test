@@ -4,7 +4,8 @@ import styles from '../../index.scss';
 import { formatDate, fieldDate } from '../commonFunctions';
 import { addTodo, editTodo } from '../../actions/index';
 import { connect } from 'react-redux'
-import { EMPTY_STRING, NONE_VALUE, CANNOT_BE_EMPTY_MESSAGE, UNDEFINED, FORM_HAS_ERRORS_MESSAGE } from './constants';
+import { EMPTY_STRING, NONE_VALUE, CANNOT_BE_EMPTY_MESSAGE, UNDEFINED, FORM_HAS_ERRORS_MESSAGE, CONFIRMATION_MESSAGES } from './constants';
+import CommonConfirmation from '../components/CommonConfirmationModal';
 
 interface Props {
     onConfirm: (data: boolean) => void,
@@ -14,6 +15,13 @@ interface Props {
     taskObj: Task
     store: any,
     index: number
+}
+
+interface ConfirmationObj {
+    title: string,
+    message: string,
+    confirmLabel: string,
+    cancelLabel: string
 }
 
 interface Task {
@@ -31,6 +39,8 @@ interface State {
     createdAt: Date
     dueDate: Date
     priority: string,
+    hideConfirmationModal: boolean,
+
     errors: {
         title: string,
         description: string
@@ -39,6 +49,7 @@ interface State {
 class AddModal extends React.Component<Props, State> {
     state: State;
     defaultState: State;
+    confirmationModalObj: ConfirmationObj;
     constructor(props: any) {
         super(props);
         if (this.props.isDataAvailable) {
@@ -49,6 +60,7 @@ class AddModal extends React.Component<Props, State> {
                 createdAt: new Date(this.props.taskObj.createdAt),
                 dueDate: new Date(this.props.taskObj.dueDate),
                 priority: this.props.taskObj.priority,
+                hideConfirmationModal: false,
                 errors: {
                     title: EMPTY_STRING,
                     description: EMPTY_STRING
@@ -58,6 +70,7 @@ class AddModal extends React.Component<Props, State> {
         } else {
             this.state = {
                 currentState: false,
+                hideConfirmationModal: false,
                 title: EMPTY_STRING,
                 description: EMPTY_STRING,
                 createdAt: new Date(),
@@ -70,6 +83,12 @@ class AddModal extends React.Component<Props, State> {
             }
         }
         this.defaultState = this.state;
+        this.confirmationModalObj = {
+            title: EMPTY_STRING,
+            message: EMPTY_STRING,
+            confirmLabel: EMPTY_STRING,
+            cancelLabel: EMPTY_STRING
+        }
     }
 
     componentDidMount() {
@@ -133,19 +152,15 @@ class AddModal extends React.Component<Props, State> {
 
     _handleConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if (this.handleValidation()) {
-            this._hideModal();
-            let task = this.state;
-            task.createdAt = new Date();
-            if (this.props.isDataAvailable) {
-                this.props.store.dispatch(editTodo(task, this.props.index));
-            } else {
-                this.props.store.dispatch(addTodo(task));
-            }
-            this.props.onConfirm(true);
-        } else {
-            alert(FORM_HAS_ERRORS_MESSAGE)
+        this.confirmationModalObj = {
+            title: "Warning",
+            message: CONFIRMATION_MESSAGES.ARE_YOU_SURE_TO_ADD_TASK,
+            confirmLabel: "Yes",
+            cancelLabel: "No"
         }
+        this._hideModalForTemporary();
+        this.setState({ hideConfirmationModal: true })
+
     }
 
     _showModal = () => {
@@ -159,10 +174,48 @@ class AddModal extends React.Component<Props, State> {
         this.setState(this.defaultState)
     }
 
+    _hideModalForTemporary = () => {
+        let modal = document.getElementById("myModal");
+        modal ? modal.style.display = "none" : null;
+    }
+
+    _handleConfirmationModal = (data: boolean) => {
+        this.setState({ hideConfirmationModal: false });
+        this._showModal();
+        if (this.handleValidation()) {
+            let task = this.state;
+            task.createdAt = new Date();
+            if (this.props.isDataAvailable) {
+                this.props.store.dispatch(editTodo(task, this.props.index));
+            } else {
+                this.props.store.dispatch(addTodo(task));
+            }
+            this.props.onConfirm(true);
+        } else {
+            alert(FORM_HAS_ERRORS_MESSAGE)
+        }
+
+    }
+
+    _handleCloseModal = (data: boolean) => {
+        this.setState({ hideConfirmationModal: false })
+    }
+
     render() {
         const { isReadOnly, isDataAvailable } = this.props;
+        const { hideConfirmationModal } = this.state;
         return (
             <>
+                {hideConfirmationModal ?
+                    <CommonConfirmation
+                        onConfirm={this._handleConfirmationModal}
+                        onClose={this._handleCloseModal}
+                        title={this.confirmationModalObj.title}
+                        message={this.confirmationModalObj.message}
+                        confirmLabel={this.confirmationModalObj.confirmLabel}
+                        cancelLabel={this.confirmationModalObj.cancelLabel}
+                    /> : EMPTY_STRING
+                }
                 <div id="myModal" className={styles.modal}>
                     <div className={styles.modalContent}>
                         <div>

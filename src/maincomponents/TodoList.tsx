@@ -58,6 +58,10 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
     /**sorting data */
     const [isSorted, setSortedStatus] = useState(false);
 
+    //group by
+    const [renderGroup, setgroupby] = useState(false);
+    const [groupData, setGroupData] = useState({});
+
     const tableHeaders = (<thead>
         <tr key="table-headers">
             <th>&nbsp;</th>
@@ -149,6 +153,21 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
         dispatch(deleteMultiTodo(arr));
     }
 
+
+
+    function groupBy(event: React.MouseEvent<HTMLButtonElement>) {
+        event.stopPropagation();
+        const cats = todos.reduce((catsSoFar: any,
+            { text }: ReduxTask) => {
+            if (!catsSoFar[text.priority]) catsSoFar[text.priority] = [];
+            catsSoFar[text.priority].push(text);
+            return catsSoFar;
+        }, {});
+        console.log(cats);
+        setGroupData(cats)
+        setgroupby(true);
+    }
+
     return (
         <div>
             {hideAddModal ?
@@ -173,8 +192,30 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
                     cancelLabel={cancelLabel}
                 /> : EMPTY_STRING}
             <div className={styles.textAlignRight}>
+                <button type="submit" className="btn btn-danger btnAlign" onClick={(e) => groupBy(e)}>Group By</button>
+            </div>
+            <div className={styles.textAlignRight}>
                 <button type="submit" className="btn btn-danger btnAlign" onClick={(e) => _deleteAll(e)}>All delete</button>
             </div>
+            {/* group by rendering option starts here */}
+            {renderGroup ? <div>
+                {
+
+                    // Object.keys(groupData).map((key) => (
+                    //     <p>{[`${key}`]}</p>
+                    // ))
+
+                    Object.entries(groupData).map(([key, value]) => {
+                        return (
+                            <div>{key} : {JSON.stringify(value)}</div>
+                        );
+                    })
+
+                }
+            </div> : EMPTY_STRING
+            }
+            {/* group by rendering option ends here */}
+
             <table className="table table-bordered table-hover" key="tablee">
                 {tableHeaders}
                 <tbody key="todo-body">

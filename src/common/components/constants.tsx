@@ -20,7 +20,8 @@ const TABLE_HEADERS = [
 ];
 
 const CONFIRMATION_MESSAGES = {
-    DELETE_CONFIRMATION: 'Do you want to delete this task?'
+    DELETE_CONFIRMATION: 'Do you want to delete this task?',
+    ARE_YOU_SURE_TO_ADD_TASK: 'Are you sure to save this task?'
 }
 
 const CSS_CLASS_LIST = {
