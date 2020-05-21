@@ -2,13 +2,15 @@ import React from 'react';
 import styles from '../../index.scss';
 
 import { formatDate, fieldDate } from '../commonFunctions';
+import { addTodo } from '../../actions/index';
 
 interface Props {
-    onConfirm: (data: State) => void,
+    onConfirm: (data: boolean) => void,
     onClose: () => void,
     isReadOnly: boolean,
     isDataAvailable: boolean,
     taskObj: Task
+    store: any
 }
 
 interface Task {
@@ -52,8 +54,6 @@ class AddModal extends React.Component<Props, State> {
                 priority: "None"
             }
         }
-        console.log(this.state, "after reste")
-
         this.defaultState = this.state;
     }
 
@@ -93,7 +93,8 @@ class AddModal extends React.Component<Props, State> {
         this._hideModal();
         let task = this.state;
         task.createdAt = new Date();
-        this.props.onConfirm(task);
+        this.props.store.dispatch(addTodo(task));
+        this.props.onConfirm(true);
     }
 
     _showModal = () => {

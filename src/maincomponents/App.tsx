@@ -9,6 +9,10 @@ import AddModal from '../common/components/AddModal';
 import { addTodo } from 'actions';
 
 
+interface Props {
+    store: any
+}
+
 interface State {
     hideModal: boolean,
     // data: Array<Task>,
@@ -26,10 +30,10 @@ interface Task {
     priority: string
 }
 
-class App extends React.Component<{}, State> {
+class App extends React.Component<Props, State> {
     state: State;
     taskList: Array<Task> = [];
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             hideModal: false,
@@ -66,9 +70,8 @@ class App extends React.Component<{}, State> {
             <>
                 <Footer />
                 <VisibleTodoList />
-                <AddTodo />
 
-                {hideModal ? <AddModal onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} /> : ""}
+                {hideModal ? <AddModal store={this.props.store} onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} /> : ""}
                 <div className={styles.bottomRightAlign}>
                     <FontAwesomeIcon icon={faPlus} onClick={this._openAddModal} />
                 </div>

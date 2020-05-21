@@ -63,7 +63,7 @@ class Table extends React.Component<Props, State> {
     componentDidMount() {
     }
 
-    onConfirm = (data: Task) => {
+    onConfirm = (data: boolean) => {
         // this.taskList.unshift(data);
         // localStorage.setItem("listData", JSON.stringify(this.taskList));
         this.setState({ hideModal: false })

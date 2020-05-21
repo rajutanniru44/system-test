@@ -11,4 +11,4 @@ import combineReducers from './reducers/index';
 const store = createStore(combineReducers)
 
 
-ReactDOM.render(<ErrorBoundary><Provider store={store}><App /></Provider></ErrorBoundary>, document.getElementById('root'));
+ReactDOM.render(<ErrorBoundary><Provider store={store}><App store={store} /></Provider></ErrorBoundary>, document.getElementById('root'));

@@ -46,8 +46,8 @@ class App extends React.Component {
         this.setState({ hideModal: true })
     }
 
-    onConfirm = (data: Task) => {
-        this.taskList.unshift(data);
+    onConfirm = (data: boolean) => {
+        // this.taskList.unshift(data);
         console.log(this.taskList);
         // localStorage.setItem("listData", JSON.stringify(this.taskList));
         this.setState({ hideModal: false, data: this.taskList })
@@ -99,7 +99,7 @@ class App extends React.Component {
                     <button className={this.getClasss('Completed')} onClick={(event) => this.openCity(event, 'Completed')}>Completed</button>
                     <button className={this.getClasss('Pending')} onClick={(event) => this.openCity(event, 'Pending')}>Pending</button>
                 </div>
-                <Table columns={dataColumns} rows={data} />
+                // <Table columns={dataColumns} rows={data} />
             </>
         )
     }
