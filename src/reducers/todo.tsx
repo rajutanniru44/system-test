@@ -36,6 +36,8 @@ const todos = (state: any = [], action: any) => {
         }
         case 'DELETE_TODO':
             return state.filter((todo: ReduxTask) => todo.id !== action.id);
+        case 'MULTI_DELETE':
+            return state.filter((val: ReduxTask) => !action.selectedTodos.includes(val));
         case 'SORT_TODO':
             return action.isSorted ? state.slice().sort((a: any, b: any) => {
                 if (action.key) {

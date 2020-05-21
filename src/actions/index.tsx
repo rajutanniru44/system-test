@@ -1,4 +1,10 @@
 let nextTodoId = 0
+
+interface ReduxTask {
+    completed: boolean
+    id: number,
+    text: Task
+}
 interface Task {
     currentState: boolean,
     title: string,
@@ -7,6 +13,7 @@ interface Task {
     dueDate: Date
     priority: string
 }
+
 export const addTodo = (text: Task) => ({
     type: 'ADD_TODO',
     id: nextTodoId++,
@@ -35,6 +42,11 @@ export const editTodo = (text: Task, id: number) => ({
 export const deleteTodo = (id: number) => ({
     type: 'DELETE_TODO',
     id
+})
+
+export const deleteMultiTodo = (selectedTodos: Array<ReduxTask>) => ({
+    type: 'MULTI_DELETE',
+    selectedTodos
 })
 
 export const sortTodo = (key: string, isSorted: boolean) => ({

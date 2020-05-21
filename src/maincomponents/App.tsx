@@ -1,5 +1,5 @@
 import React from 'react'
-import Footer from './Footer'
+import TabsHeader from './TabsHeader'
 import VisibleTodoList from '../container/VisibleTodoList'
 import styles from '../index.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -98,7 +98,7 @@ class App extends React.Component<Props, State> {
                 <div className={styles.textAlignCenter}>
                     Global search <input type="text" ref={this.textInput} onChange={this._handleSearchChange} />
                 </div>
-                <Footer />
+                <TabsHeader />
                 <VisibleTodoList />
 
                 {hideModal ? <AddModal store={this.props.store} onConfirm={this.onConfirm} onClose={this._onClose} isReadOnly={isReadOnly} taskObj={taskObj} isDataAvailable={false} index={0} /> : ""}

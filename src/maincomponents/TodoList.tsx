@@ -4,7 +4,7 @@ import { formatDate } from '../common/commonFunctions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import CommonConfirmation from '../common/components/CommonConfirmationModal';
-import { deleteTodo, sortTodo } from '../actions/index';
+import { deleteTodo, sortTodo, deleteMultiTodo } from '../actions/index';
 import { connect, useStore } from 'react-redux'
 import styles from '../index.scss';
 import AddModal from '../common/components/AddModal';
@@ -27,7 +27,8 @@ interface Task {
     description: string
     createdAt: Date
     dueDate: Date
-    priority: string
+    priority: string,
+    isChecked: boolean
 }
 const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
     const store = useStore()
@@ -41,7 +42,8 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
         description: EMPTY_STRING,
         createdAt: new Date(),
         dueDate: new Date(),
-        priority: NONE_VALUE
+        priority: NONE_VALUE,
+        isChecked: false
     });
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,6 +60,7 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
 
     const tableHeaders = (<thead>
         <tr key="table-headers">
+            <th>&nbsp;</th>
             {TABLE_HEADERS.map((column: HeaderData, index: number) => {
                 return <th className={styles.cursorPointer} key={`${index}i`} onClick={(e) => _sortTodo(e, column.value)} > {column.label}</th>;
             })}
@@ -124,11 +127,26 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
             description: EMPTY_STRING,
             createdAt: new Date(),
             dueDate: new Date(),
-            priority: NONE_VALUE
+            priority: NONE_VALUE,
+            isChecked: false
         });
         setAddmodal(false);
         setReadOnly(false);
         setDataAvailable(false);
+    }
+
+    function _handleCheckChange(event: React.MouseEvent<HTMLInputElement>, todo: Task, id: number) {
+        event.stopPropagation();
+        todo.isChecked = event.currentTarget.checked;
+        setTaskObj(todo)
+    }
+
+    function _deleteAll(event: React.MouseEvent<HTMLButtonElement>) {
+        event.stopPropagation();
+        let arr = todos.filter((obj: ReduxTask) => {
+            return obj.text.isChecked == true
+        });
+        dispatch(deleteMultiTodo(arr));
     }
 
     return (
@@ -154,13 +172,20 @@ const TodoList = ({ todos, toggleTodo, dispatch }: any) => {
                     confirmLabel={confirmLabel}
                     cancelLabel={cancelLabel}
                 /> : EMPTY_STRING}
-
+            <div className={styles.textAlignRight}>
+                <button type="submit" className="btn btn-danger btnAlign" onClick={(e) => _deleteAll(e)}>All delete</button>
+            </div>
             <table className="table table-bordered table-hover" key="tablee">
                 {tableHeaders}
                 <tbody key="todo-body">
                     {todos.map((todo: ReduxTask, index: number) => {
                         return (
                             <tr key={`${index}tr`} onClick={() => _handleDisableMode(todo.text, todo.id)}>
+                                <td>
+                                    <div className="form-check">
+                                        <input type="checkbox" className="form-check-input" onClick={(e) => _handleCheckChange(e, todo.text, todo.id)} />
+                                    </div>
+                                </td>
                                 <td key={`${index}title`} className={todo.text.currentState ? CSS_CLASS_LIST.BG_GREEN : EMPTY_STRING} style={{
                                     textDecoration: todo.completed ? CSS_CLASS_LIST.LINE_THOROUGH : CSS_CLASS_LIST.NONE
                                 }}>{todo.text.title}</td>

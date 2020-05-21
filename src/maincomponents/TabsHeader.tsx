@@ -3,7 +3,7 @@ import FilterLink from '../container/FilterLink'
 import { VisibilityFilters } from '../actions'
 import styles from '.././index.scss';
 
-const Footer = () => (
+const TabsHeader = () => (
     <div className={styles.textAlignCenter}>
         <FilterLink filter={VisibilityFilters.SHOW_ALL}>All Tasks</FilterLink>
         <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>Completed</FilterLink>
@@ -11,4 +11,4 @@ const Footer = () => (
     </div >
 )
 
-export default Footer
+export default TabsHeader
