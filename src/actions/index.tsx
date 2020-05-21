@@ -1,11 +1,19 @@
 let nextTodoId = 0
-export const addTodo = (text: any) => ({
+interface Task {
+    currentState: boolean,
+    title: string,
+    description: string
+    createdAt: Date
+    dueDate: Date
+    priority: string
+}
+export const addTodo = (text: Task) => ({
     type: 'ADD_TODO',
     id: nextTodoId++,
     text
 })
 
-export const setVisibilityFilter = (filter: any) => ({
+export const setVisibilityFilter = (filter: string) => ({
     type: 'SET_VISIBILITY_FILTER',
     filter
 })
@@ -18,7 +26,7 @@ export const toggleTodo = (e: React.MouseEvent<HTMLButtonElement>, id: number) =
     })
 }
 
-export const editTodo = (text: any, id: number) => ({
+export const editTodo = (text: Task, id: number) => ({
     type: 'EDIT_TODO',
     id,
     text

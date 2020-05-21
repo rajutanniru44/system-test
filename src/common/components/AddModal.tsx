@@ -4,6 +4,7 @@ import styles from '../../index.scss';
 import { formatDate, fieldDate } from '../commonFunctions';
 import { addTodo, editTodo } from '../../actions/index';
 import { connect } from 'react-redux'
+import { EMPTY_STRING, NONE_VALUE, CANNOT_BE_EMPTY_MESSAGE, UNDEFINED, FORM_HAS_ERRORS_MESSAGE } from './constants';
 
 interface Props {
     onConfirm: (data: boolean) => void,
@@ -49,22 +50,22 @@ class AddModal extends React.Component<Props, State> {
                 dueDate: new Date(this.props.taskObj.dueDate),
                 priority: this.props.taskObj.priority,
                 errors: {
-                    title: "",
-                    description: ""
+                    title: EMPTY_STRING,
+                    description: EMPTY_STRING
                 }
             }
 
         } else {
             this.state = {
                 currentState: false,
-                title: "",
-                description: "",
+                title: EMPTY_STRING,
+                description: EMPTY_STRING,
                 createdAt: new Date(),
                 dueDate: new Date(),
-                priority: "None",
+                priority: NONE_VALUE,
                 errors: {
-                    title: "",
-                    description: ""
+                    title: EMPTY_STRING,
+                    description: EMPTY_STRING
                 }
             }
         }
@@ -103,26 +104,26 @@ class AddModal extends React.Component<Props, State> {
 
     handleValidation = () => {
         let { title, description } = this.state;
-        let errors = { title: "", description: "" };
+        let errors = { title: EMPTY_STRING, description: EMPTY_STRING };
         let formIsValid = true;
 
         //title
         if (!title) {
             formIsValid = false;
-            errors["title"] = "Cannot be empty";
+            errors["title"] = CANNOT_BE_EMPTY_MESSAGE;
         }
 
-        if (typeof title !== "undefined") {
+        if (typeof title !== UNDEFINED) {
             title.length >= 10 && title.length <= 140 ? formIsValid = true : formIsValid = false;
         }
 
         //description
         if (!description) {
             formIsValid = false;
-            errors["description"] = "Cannot be empty";
+            errors["description"] = CANNOT_BE_EMPTY_MESSAGE;
         }
 
-        if (typeof description !== "undefined") {
+        if (typeof description !== UNDEFINED) {
             description.length >= 10 && description.length <= 500 ? formIsValid = true : formIsValid = false;
         }
 
@@ -143,7 +144,7 @@ class AddModal extends React.Component<Props, State> {
             }
             this.props.onConfirm(true);
         } else {
-            alert("Form has errors.")
+            alert(FORM_HAS_ERRORS_MESSAGE)
         }
     }
 

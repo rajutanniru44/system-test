@@ -3,7 +3,7 @@ import { toggleTodo } from '../actions'
 import TodoList from '../maincomponents/TodoList'
 import { VisibilityFilters } from '../actions'
 
-const getVisibleTodos = (todos: any, filter: any) => {
+const getVisibleTodos = (todos: any, filter: string) => {
     switch (filter) {
         case VisibilityFilters.SHOW_ALL:
             return todos
@@ -21,7 +21,7 @@ const mapStateToProps = (state: any) => ({
 })
 
 const mapDispatchToProps = (dispatch: any) => ({
-    toggleTodo: (e: React.MouseEvent<HTMLButtonElement>, id: any) => dispatch(toggleTodo(e, id))
+    toggleTodo: (e: React.MouseEvent<HTMLButtonElement>, id: number) => dispatch(toggleTodo(e, id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

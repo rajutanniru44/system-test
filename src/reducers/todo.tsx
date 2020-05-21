@@ -1,3 +1,18 @@
+interface ReduxTask {
+    completed: boolean
+    id: number,
+    text: Task
+}
+
+interface Task {
+    currentState: boolean,
+    title: string,
+    description: string
+    createdAt: Date
+    dueDate: Date
+    priority: string
+}
+
 const todos = (state: any = [], action: any) => {
     switch (action.type) {
         case 'ADD_TODO':
@@ -9,18 +24,18 @@ const todos = (state: any = [], action: any) => {
             ...state
             ]
         case 'TOGGLE_TODO':
-            return state.map((todo: any) =>
+            return state.map((todo: ReduxTask) =>
                 todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
             )
         case 'EDIT_TODO': {
-            let objIndex = state.findIndex((obj: any) => {
+            let objIndex = state.findIndex((obj: ReduxTask) => {
                 return obj.id === action.id
             });
             state[objIndex].text = action.text;
             return state
         }
         case 'DELETE_TODO':
-            return state.filter((todo: any) => todo.id !== action.id);
+            return state.filter((todo: ReduxTask) => todo.id !== action.id);
         case 'SORT_TODO':
             return action.isSorted ? state.slice().sort((a: any, b: any) => {
                 if (action.key) {
